@@ -10,26 +10,36 @@ public class ObjectManager implements ActionListener {
 	int score = 0;
 	ArrayList<Apple> apples = new ArrayList<Apple>();
 	Random random = new Random();
-
 	void addApple() {
-		apples.add(new Apple(random.nextInt(AppleFall.WIDTH), 0, 50, 50));
+		int spawnLocation = random.nextInt(AppleFall.WIDTH);
+		if (spawnLocation > AppleFall.WIDTH - 60) {
+			spawnLocation = AppleFall.WIDTH - 60;
+		}
+		else if (spawnLocation < 60) {
+			spawnLocation = 60;
+		}
+		apples.add(new Apple(spawnLocation, 0, 50, 50));
 	}
 
 	ObjectManager(Basket bask) {
 		basket = bask;
+	}
+	int getScore() {
+		return score;
 	}
 
 	void update() {
 		if (basket.isActive == true) {
 			for (int i = 0; i < apples.size(); i++) {
 				apples.get(i).update();
-				if (apples.get(i).y > AppleFall.HEIGHT) {
+				if (apples.get(i).y > 660) {
 					apples.get(i).isActive = false;
+					basket.isActive = false;
 				}
 			}
 			basket.Update();
 			purgeObjects();
-
+			checkCollision();
 		}
 	}
 
@@ -38,7 +48,9 @@ public class ObjectManager implements ActionListener {
 		for (int i = 0; i < apples.size(); i++) {
 			apples.get(i).draw(g);
 		}
-
+		String score1 = String.valueOf(getScore());
+		g.setColor(Color.BLACK);
+		g.drawString("Score: " + score1, 10, 20);
 	}
 
 	void purgeObjects() {
@@ -54,6 +66,16 @@ public class ObjectManager implements ActionListener {
 		while (apples.size() > 0) {
 				apples.remove(0);
 			}
+	}
+	void checkCollision() {
+		for (int i = 0; i < apples.size(); i++) {
+			if (apples.get(i).collisionBox.intersects(basket.collisionBox)) {
+				apples.get(i).isActive = false;
+				System.out.println("apple collected");
+				score++;
+			}
+			
+		}
 	}
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub

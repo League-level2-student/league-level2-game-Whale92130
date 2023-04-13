@@ -18,7 +18,6 @@ public class Apple extends GameObject {
 	}
 	void update() {
 		y= y+speed;
-		System.out.println(y);
 		super.Update();
 
 	}

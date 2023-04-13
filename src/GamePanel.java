@@ -11,6 +11,7 @@ import javax.swing.Timer;
 
 public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	Timer frameDraw;
+	Timer appleSpawn;
 	Font titleFont;
 	Font textFont;
 	Font smallFont;
@@ -19,7 +20,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	final int END = 2;
 	int currentState = MENU;
 	boolean showRules = false;
-	Basket basket = new Basket(250, 700, 50, 50);
+	Basket basket = new Basket(250, 650, 100, 100);
+	ObjectManager obManage = new ObjectManager(basket);
 
 	@Override
 	public void paintComponent(Graphics g) {
@@ -31,6 +33,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			drawEndState(g);
 		}
 	}
+	
 
 	GamePanel() {
 		this.titleFont = new Font("Arial", Font.PLAIN, 48);
@@ -46,8 +49,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.setFont(titleFont);
 		g.setColor(Color.WHITE);
 		g.drawString("Game Over", 175, 200);
+		g.setFont(smallFont);
+		g.drawString("an apple touched the ground", 175, 240);
 		g.setFont(textFont);
 		g.drawString("Press ENTER to go back to menu", 75, 400);
+		String score1 = String.valueOf(obManage.getScore());
+		g.drawString("Your Score Was: " + score1, 10, 30);
 	}
 
 	private void drawGameState(Graphics g) {
@@ -67,6 +74,19 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 		g.setColor(Color.black);
 		g.fillOval(225, 50, 150, 150);
+		obManage.draw(g);
+		
+		appleSpawn = new Timer(2000-obManage.getScore()*100, obManage);
+		appleSpawn.start();
+		
+		if (basket.isActive == false) {
+			boolean hi = true;
+			while (hi == true) {
+			hi = false;
+			stopGame();
+			currentState = END;
+			}
+		}
 	}
 
 	private void drawMenuState(Graphics g) {
@@ -114,20 +134,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		}
 		if (currentState == GAME) {
 
-			if (e.getKeyCode() == KeyEvent.VK_UP) {
-				System.out.println("UP");
-				if (basket.y > 0) {
-					basket.up();
-				}
-			}
-			if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-				System.out.println("DOWN");
-				if (basket.y >= AppleFall.HEIGHT-80) {
-
-				} else {
-					basket.down();
-				}
-			}
 			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 				System.out.println("LEFT");
 				if (basket.x > 0) {
@@ -146,11 +152,18 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	private void startGame() {
-
+		appleSpawn = new Timer(2000, obManage);
+		appleSpawn.start();
+		basket.isActive = true;
+		obManage.score =0;
 	}
 
 	private void stopGame() {
-
+		appleSpawn.stop();
+		System.out.println("stop");
+		basket.x = 250;
+		basket.y = 650;
+		obManage.clearApples();
 	}
 
 	@Override
@@ -177,7 +190,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	private void updateGameState() {
-
+		obManage.update();
 	}
 
 	private void updateMenuState() {
