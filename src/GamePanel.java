@@ -13,10 +13,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	Timer frameDraw;
 	Font titleFont;
 	Font textFont;
+	Font smallFont;
 	final int MENU = 0;
 	final int GAME = 1;
 	final int END = 2;
 	int currentState = MENU;
+	boolean showRules = false;
 	Basket basket = new Basket(250, 700, 50, 50);
 
 	@Override
@@ -33,10 +35,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	GamePanel() {
 		this.titleFont = new Font("Arial", Font.PLAIN, 48);
 		this.textFont = new Font("Arial", Font.PLAIN, 28);
+		this.smallFont = new Font("Arial", Font.PLAIN, 18);
+		
 		frameDraw = new Timer(1000 / 60, this);
 		frameDraw.start();
 	}
-
 	private void drawEndState(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, AppleFall.WIDTH, AppleFall.HEIGHT);
@@ -74,7 +77,13 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.drawString("Apple Fall", 200, 200);
 		g.setFont(textFont);
 		g.drawString("Press ENTER to start", 150, 400);
-		g.drawString("Press SPACE for instructions", 120, 600);
+		g.drawString("Press SPACE for instructions", 120, 550);
+		if (showRules == true) {
+			g.setFont(smallFont);
+			g.drawString("1. Use arrows to move", 120, 600);
+			g.drawString("2. Collect Apples", 120, 620);
+			g.drawString("3. If one touches the ground you lose", 120, 640);
+		}
 	}
 
 	@Override
@@ -96,6 +105,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 					stopGame();
 				}
 
+			}
+		}
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			if (currentState == MENU) {
+				showRules = true;
 			}
 		}
 		if (currentState == GAME) {

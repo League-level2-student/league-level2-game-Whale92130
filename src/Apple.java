@@ -4,41 +4,23 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-public class Basket extends GameObject {
+public class Apple extends GameObject {
 	public static BufferedImage image;
 	public static boolean needImage = true;
 	public static boolean gotImage = false;	
-	Basket(int x, int y, int width, int height) {
+	Apple(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		speed = 10;
+		// TODO Auto-generated constructor stub
+		speed = 1;
 		if (needImage) {
-		    loadImage ("basket.png");
+		    loadImage ("apple.png");
 		}
 	}
+	void update() {
+		y= y+speed;
+		System.out.println(y);
+		super.Update();
 
-	void draw(Graphics g) {
-        if (gotImage) {
-        	g.drawImage(image, x, y, width, height, null);
-        } else {
-        	g.setColor(Color.BLUE);
-        	g.fillRect(x, y, width, height);
-        }
-	}
-
-	public void right() {
-		x += speed;
-	}
-
-	public void left() {
-		x -= speed;
-	}
-
-	public void up() {
-		y -= speed;
-	}
-
-	public void down() {
-		y += speed;
 	}
 	void loadImage(String imageFile) {
 	    if (needImage) {
@@ -51,7 +33,15 @@ public class Basket extends GameObject {
 	        needImage = false;
 	    }
 	}
-	boolean getActive() {
-		 return isActive;
-	 }
+	void draw(Graphics g) {
+	       
+        if (gotImage) {
+        	g.drawImage(image, x, y, width, height, null);
+        } else {
+        	g.setColor(Color.BLUE);
+        	g.fillRect(x, y, width, height);
+        }
+	}
+	
+
 }
