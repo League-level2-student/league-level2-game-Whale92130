@@ -20,7 +20,7 @@ public class Apple extends GameObject {
 		}
 	}
 	void update() {
-		y= (int) (y+speed);
+		y= y+speed;
 		super.Update();
 
 	}

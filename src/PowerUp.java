@@ -1,45 +1,27 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
-public class Basket extends GameObject {
+public class PowerUp extends GameObject {
 	public static BufferedImage image;
 	public static boolean needImage = true;
 	public static boolean gotImage = false;	
-	Basket(int x, int y, int width, int height) {
+	Random random = new Random();
+	PowerUp(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		speed = 10;
+		// TODO Auto-generated constructor stub
+		speed = 3;
 		if (needImage) {
-		    loadImage ("basket.png");
+		    loadImage("powerUp.png");
 		}
 	}
+	void update() {
+		y= y+speed;
+		super.Update();
 
-	void draw(Graphics g) {
-        if (gotImage) {
-        	g.drawImage(image, x, y, width, height, null);
-        } else {
-        	g.setColor(Color.BLUE);
-        	g.fillRect(x, y, width, height);
-        }
-	}
-
-	public void right() {
-		x += speed;
-		
-	}
-
-	public void left() {
-		x -= speed;
-	}
-	public void fastRight() {
-		x += speed*2;
-		
-	}
-
-	public void fastLeft() {
-		x -= speed*2;
 	}
 	void loadImage(String imageFile) {
 	    if (needImage) {
@@ -52,7 +34,15 @@ public class Basket extends GameObject {
 	        needImage = false;
 	    }
 	}
-	boolean getActive() {
-		 return isActive;
-	 }
+	void draw(Graphics g) {
+	       
+        if (gotImage) {
+        	g.drawImage(image, x, y, width, height, null);
+        } else {
+        	g.setColor(Color.BLUE);
+        	g.fillRect(x, y, width, height);
+        }
+	}
+	
+
 }

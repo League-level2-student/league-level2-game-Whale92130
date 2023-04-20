@@ -57,6 +57,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.drawString("Press ENTER to go back to menu", 75, 400);
 		String score1 = String.valueOf(obManage.getScore());
 		g.drawString("Your Score Was: " + score1, 10, 30);
+		obManage.powerUp = false;
 	}
 
 	private void drawGameState(Graphics g) {
@@ -131,6 +132,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			g.drawString("1. Use arrows to move", 120, 550);
 			g.drawString("2. Collect Apples", 120, 570);
 			g.drawString("3. If one touches the ground you lose", 120, 590);
+			g.drawString("4. Watch out for bombs", 120, 610);
 		}
 		
 	}
@@ -167,15 +169,28 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 				System.out.println("LEFT");
 				if (basket.x > 0) {
-					basket.left();
+					if(obManage.powerUp == true) {
+						basket.fastLeft();
+						System.out.println("fast");
+					}
+					else {
+						basket.left();
+					}
+					
 				}
 			}
 			if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 				System.out.println("RIGHT");
-				if (basket.x >= AppleFall.WIDTH - 50) {
+				if (basket.x >= AppleFall.WIDTH - 100) {
 
 				} else {
-					basket.right();
+					if(obManage.powerUp == true) {
+						basket.fastRight();
+						System.out.println("fast");
+					}
+					else {
+						basket.right();
+					}
 				}
 			}
 		}
@@ -193,7 +208,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		System.out.println("stop");
 		basket.x = 250;
 		basket.y = 650;
-		obManage.clearApples();
+		obManage.clearObjects();
 	}
 
 	@Override
@@ -211,6 +226,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		} else if (currentState == END) {
 
 			updateEndState();
+			obManage.clearObjects();
 		}
 		repaint();
 	}

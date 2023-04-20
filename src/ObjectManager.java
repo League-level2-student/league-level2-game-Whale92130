@@ -8,9 +8,13 @@ import java.util.Random;
 public class ObjectManager implements ActionListener {
 	Basket basket;
 	int score = 0;
+	int count = 1;
 	ArrayList<Apple> apples = new ArrayList<Apple>();
+	ArrayList<Bomb> bombs = new ArrayList<Bomb>();
+	ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
 	Random random = new Random();
 	boolean collect;
+	boolean powerUp = false;
 	void addApple() {
 		int spawnLocation = random.nextInt(AppleFall.WIDTH);
 		if (spawnLocation > AppleFall.WIDTH - 60) {
@@ -20,6 +24,26 @@ public class ObjectManager implements ActionListener {
 			spawnLocation = 50;
 		}
 		apples.add(new Apple(spawnLocation, 0, 50, 50));
+	}
+	void addBomb() {
+		int spawnLocation = random.nextInt(AppleFall.WIDTH);
+		if (spawnLocation > AppleFall.WIDTH - 60) {
+			spawnLocation = AppleFall.WIDTH - 60;
+		}
+		else if (spawnLocation < 50) {
+			spawnLocation = 50;
+		}
+		bombs.add(new Bomb(spawnLocation, 0, 50, 50));
+	}
+	void addPowerUp() {
+		int spawnLocation = random.nextInt(AppleFall.WIDTH);
+		if (spawnLocation > AppleFall.WIDTH - 60) {
+			spawnLocation = AppleFall.WIDTH - 60;
+		}
+		else if (spawnLocation < 50) {
+			spawnLocation = 50;
+		}
+		powerUps.add(new PowerUp(spawnLocation, 0, 50, 50));
 	}
 
 	ObjectManager(Basket bask) {
@@ -38,6 +62,18 @@ public class ObjectManager implements ActionListener {
 					basket.isActive = false;
 				}
 			}
+			for (int i = 0; i < bombs.size(); i++) {
+				bombs.get(i).update();
+				if (bombs.get(i).y > 660) {
+				bombs.get(i).isActive = false;
+				}
+			}
+			for (int i = 0; i < powerUps.size(); i++) {
+				powerUps.get(i).update();
+				if (powerUps.get(i).y > 660) {
+					powerUps.get(i).isActive = false;
+				}
+			}
 			basket.Update();
 			purgeObjects();
 			checkCollision();
@@ -46,8 +82,14 @@ public class ObjectManager implements ActionListener {
 
 	void draw(Graphics g) {
 		basket.draw(g);
+		for (int i = 0; i < bombs.size(); i++) {
+			bombs.get(i).draw(g);
+		}
 		for (int i = 0; i < apples.size(); i++) {
 			apples.get(i).draw(g);
+		}
+		for (int i = 0; i < powerUps.size(); i++) {
+			powerUps.get(i).draw(g);
 		}
 		String score1 = String.valueOf(getScore());
 		g.setColor(Color.BLACK);
@@ -61,12 +103,31 @@ public class ObjectManager implements ActionListener {
 			}
 
 		}
+		for (int i = 0; i < bombs.size(); i++) {
+			if (bombs.get(i).isActive == false) {
+				bombs.remove(i);
+			}
+
+		}
+		for (int i = 0; i < powerUps.size(); i++) {
+			if (powerUps.get(i).isActive == false) {
+				powerUps.remove(i);
+			}
+
+		}
 	}
 
-	void clearApples() {
+	void clearObjects() {
+		System.out.println("objects cleared");
 		while (apples.size() > 0) {
 				apples.remove(0);
 			}
+		while(bombs.size() > 0) {
+			bombs.remove(0);
+		}
+		while(powerUps.size() > 0) {
+			powerUps.remove(0);
+		}
 	}
 	
 	void checkCollision() {
@@ -78,6 +139,25 @@ public class ObjectManager implements ActionListener {
 				purgeObjects();
 				collect = true;
 				
+			}
+			
+		}
+		for (int i = 0; i < bombs.size(); i++) {
+			if (bombs.get(i).collisionBox.intersects(basket.collisionBox)) {
+				bombs.get(i).isActive = false;
+				purgeObjects();
+				System.out.println("bomb hit");
+				basket.isActive = false;
+				
+			}
+			
+		}
+		for (int i = 0; i < powerUps.size(); i++) {
+			if (powerUps.get(i).collisionBox.intersects(basket.collisionBox)) {
+				powerUps.get(i).isActive = false;
+				purgeObjects();
+				System.out.println("collected power up");
+				powerUp = true;
 			}
 			
 		}
@@ -95,6 +175,18 @@ public class ObjectManager implements ActionListener {
 		// TODO Auto-generated method stub
 		System.out.println("apples added");
 		addApple();
+		if (count%3 == 0) {
+		addBomb();
+		System.out.println("Bomb added");
+		
+		}
+		if (count%5 == 0) {
+			addPowerUp();
+			System.out.println("powerUp added");
+			
+			}
+		count++;
+		System.out.println("count=" + count);
 	}
 
 }
