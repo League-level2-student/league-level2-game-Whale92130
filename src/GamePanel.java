@@ -20,6 +20,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	final int END = 2;
 	int currentState = MENU;
 	boolean showRules = false;
+	boolean harderGame = true;
+	int c = 1;
 	Basket basket = new Basket(250, 650, 100, 100);
 	ObjectManager obManage = new ObjectManager(basket);
 
@@ -33,16 +35,16 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			drawEndState(g);
 		}
 	}
-	
 
 	GamePanel() {
 		this.titleFont = new Font("Arial", Font.PLAIN, 48);
 		this.textFont = new Font("Arial", Font.PLAIN, 28);
 		this.smallFont = new Font("Arial", Font.PLAIN, 18);
-		
+
 		frameDraw = new Timer(1000 / 60, this);
 		frameDraw.start();
 	}
+
 	private void drawEndState(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, AppleFall.WIDTH, AppleFall.HEIGHT);
@@ -75,18 +77,43 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.setColor(Color.black);
 		g.fillOval(225, 50, 150, 150);
 		obManage.draw(g);
-		
-		appleSpawn = new Timer(2000-obManage.getScore()*100, obManage);
-		appleSpawn.start();
-		
+
+		if (harderGame == true) {
+			while (obManage.collectedApple()) {
+				if (appleSpawn.getDelay() > 500) {
+					appleSpawn.stop();
+					appleSpawn = new Timer(2000 - obManage.getScore() * 30, obManage);
+					appleSpawn.restart();
+					obManage.setfalse();
+				} else {
+					stopHard();
+
+				}
+				System.out.println(appleSpawn.getDelay());
+			}
+		} else {
+
+			if (c == 1) {
+				System.out.println("stopped hard mode");
+				c = 0;
+			}
+		}
+
 		if (basket.isActive == false) {
 			boolean hi = true;
 			while (hi == true) {
-			hi = false;
-			stopGame();
-			currentState = END;
+				hi = false;
+				stopGame();
+				currentState = END;
 			}
 		}
+
+	}
+
+	void stopHard() {
+		harderGame = false;
+		obManage.setfalse();
+		appleSpawn = new Timer(500, obManage);
 	}
 
 	private void drawMenuState(Graphics g) {
@@ -97,13 +124,15 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.drawString("Apple Fall", 200, 200);
 		g.setFont(textFont);
 		g.drawString("Press ENTER to start", 150, 400);
-		g.drawString("Press SPACE for instructions", 120, 550);
+		g.drawString("Press SPACE for instructions", 120, 500);
+		
 		if (showRules == true) {
 			g.setFont(smallFont);
-			g.drawString("1. Use arrows to move", 120, 600);
-			g.drawString("2. Collect Apples", 120, 620);
-			g.drawString("3. If one touches the ground you lose", 120, 640);
+			g.drawString("1. Use arrows to move", 120, 550);
+			g.drawString("2. Collect Apples", 120, 570);
+			g.drawString("3. If one touches the ground you lose", 120, 590);
 		}
+		
 	}
 
 	@Override
@@ -132,6 +161,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				showRules = true;
 			}
 		}
+		
 		if (currentState == GAME) {
 
 			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
@@ -142,7 +172,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			}
 			if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 				System.out.println("RIGHT");
-				if (basket.x >= AppleFall.WIDTH-50) {
+				if (basket.x >= AppleFall.WIDTH - 50) {
 
 				} else {
 					basket.right();
@@ -155,7 +185,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		appleSpawn = new Timer(2000, obManage);
 		appleSpawn.start();
 		basket.isActive = true;
-		obManage.score =0;
+		obManage.score = 0;
 	}
 
 	private void stopGame() {

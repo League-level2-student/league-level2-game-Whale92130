@@ -10,13 +10,14 @@ public class ObjectManager implements ActionListener {
 	int score = 0;
 	ArrayList<Apple> apples = new ArrayList<Apple>();
 	Random random = new Random();
+	boolean collect;
 	void addApple() {
 		int spawnLocation = random.nextInt(AppleFall.WIDTH);
 		if (spawnLocation > AppleFall.WIDTH - 60) {
 			spawnLocation = AppleFall.WIDTH - 60;
 		}
-		else if (spawnLocation < 60) {
-			spawnLocation = 60;
+		else if (spawnLocation < 50) {
+			spawnLocation = 50;
 		}
 		apples.add(new Apple(spawnLocation, 0, 50, 50));
 	}
@@ -67,15 +68,28 @@ public class ObjectManager implements ActionListener {
 				apples.remove(0);
 			}
 	}
+	
 	void checkCollision() {
 		for (int i = 0; i < apples.size(); i++) {
 			if (apples.get(i).collisionBox.intersects(basket.collisionBox)) {
 				apples.get(i).isActive = false;
 				System.out.println("apple collected");
 				score++;
+				purgeObjects();
+				collect = true;
+				
 			}
 			
 		}
+	}
+	
+	boolean collectedApple() {
+		
+		return collect;
+	}
+	
+	void setfalse() {
+		collect = false;
 	}
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
