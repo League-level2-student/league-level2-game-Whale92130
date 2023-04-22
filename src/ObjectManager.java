@@ -9,12 +9,16 @@ public class ObjectManager implements ActionListener {
 	Basket basket;
 	int score = 0;
 	int count = 1;
+	int fast = 1;
+	int pause = 0;
 	ArrayList<Apple> apples = new ArrayList<Apple>();
 	ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 	ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
+	ArrayList<PowerUp2> powerUps2 = new ArrayList<PowerUp2>();
 	Random random = new Random();
 	boolean collect;
 	boolean powerUp = false;
+	boolean sizeUp = false;
 	void addApple() {
 		int spawnLocation = random.nextInt(AppleFall.WIDTH);
 		if (spawnLocation > AppleFall.WIDTH - 60) {
@@ -45,6 +49,16 @@ public class ObjectManager implements ActionListener {
 		}
 		powerUps.add(new PowerUp(spawnLocation, 0, 50, 50));
 	}
+	void addPowerUp2() {
+		int spawnLocation = random.nextInt(AppleFall.WIDTH);
+		if (spawnLocation > AppleFall.WIDTH - 60) {
+			spawnLocation = AppleFall.WIDTH - 60;
+		}
+		else if (spawnLocation < 50) {
+			spawnLocation = 50;
+		}
+		powerUps2.add(new PowerUp2(spawnLocation, 0, 50, 50));
+	}
 
 	ObjectManager(Basket bask) {
 		basket = bask;
@@ -74,6 +88,12 @@ public class ObjectManager implements ActionListener {
 					powerUps.get(i).isActive = false;
 				}
 			}
+			for (int i = 0; i < powerUps2.size(); i++) {
+				powerUps2.get(i).update();
+				if (powerUps2.get(i).y > 660) {
+					powerUps2.get(i).isActive = false;
+				}
+			}
 			basket.Update();
 			purgeObjects();
 			checkCollision();
@@ -90,6 +110,9 @@ public class ObjectManager implements ActionListener {
 		}
 		for (int i = 0; i < powerUps.size(); i++) {
 			powerUps.get(i).draw(g);
+		}
+		for (int i = 0; i < powerUps2.size(); i++) {
+			powerUps2.get(i).draw(g);
 		}
 		String score1 = String.valueOf(getScore());
 		g.setColor(Color.BLACK);
@@ -115,6 +138,12 @@ public class ObjectManager implements ActionListener {
 			}
 
 		}
+		for (int i = 0; i < powerUps2.size(); i++) {
+			if (powerUps2.get(i).isActive == false) {
+				powerUps2.remove(i);
+			}
+
+		}
 	}
 
 	void clearObjects() {
@@ -128,6 +157,9 @@ public class ObjectManager implements ActionListener {
 		while(powerUps.size() > 0) {
 			powerUps.remove(0);
 		}
+		while(powerUps2.size() > 0) {
+			powerUps2.remove(0);
+		}
 	}
 	
 	void checkCollision() {
@@ -138,6 +170,7 @@ public class ObjectManager implements ActionListener {
 				score++;
 				purgeObjects();
 				collect = true;
+				pause++;
 				
 			}
 			
@@ -158,6 +191,18 @@ public class ObjectManager implements ActionListener {
 				purgeObjects();
 				System.out.println("collected power up");
 				powerUp = true;
+				fast++;
+			}
+			
+		}
+		for (int i = 0; i < powerUps2.size(); i++) {
+			if (powerUps2.get(i).collisionBox.intersects(basket.collisionBox)) {
+				powerUps2.get(i).isActive = false;
+				purgeObjects();
+				System.out.println("collected size up");
+				sizeUp = true;
+				pause = score;
+				
 			}
 			
 		}
@@ -185,8 +230,14 @@ public class ObjectManager implements ActionListener {
 			System.out.println("powerUp added");
 			
 			}
+		if (count%6 == 0) {
+			addPowerUp2();
+			System.out.println("sizeUp added");
+			
+			}
 		count++;
 		System.out.println("count=" + count);
+		
 	}
 
 }

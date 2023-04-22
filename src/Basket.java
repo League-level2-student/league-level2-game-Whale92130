@@ -10,7 +10,7 @@ public class Basket extends GameObject {
 	public static boolean gotImage = false;	
 	Basket(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		speed = 10;
+		speed = 1;
 		if (needImage) {
 		    loadImage ("basket.png");
 		}
@@ -24,22 +24,41 @@ public class Basket extends GameObject {
         	g.fillRect(x, y, width, height);
         }
 	}
-
+	public void sizeUp() {
+		width=200;
+		height = 200;
+		y=y-100;
+		x=x-100;
+	}
+	public void sizeDown() {
+		width=100;
+		height = 100;
+		y=y+100;
+		x=x+100;
+	}
 	public void right() {
+		for (int i = 0; i<10; i++) {
 		x += speed;
 		
+		}
 	}
 
 	public void left() {
+		for (int i = 0; i<10; i++) {
 		x -= speed;
+		}
 	}
-	public void fastRight() {
-		x += speed*2;
+	public void fastRight(int fast) {
+		for (int i = 0; i<10; i++) {
+		x += speed*fast;
+		}
 		
 	}
 
-	public void fastLeft() {
-		x -= speed*2;
+	public void fastLeft(int fast) {
+		for (int i = 0; i<10; i++) {
+		x -= speed*fast;
+		}
 	}
 	void loadImage(String imageFile) {
 	    if (needImage) {
