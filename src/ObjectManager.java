@@ -10,7 +10,8 @@ public class ObjectManager implements ActionListener {
 	int score = 0;
 	int count = 1;
 	int fast = 1;
-	int pause = 0;
+	int timer = 0;
+	int timer2 = 0;
 	ArrayList<Apple> apples = new ArrayList<Apple>();
 	ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 	ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
@@ -170,7 +171,12 @@ public class ObjectManager implements ActionListener {
 				score++;
 				purgeObjects();
 				collect = true;
-				pause++;
+				if(timer+5 == score) {
+					powerUp = false;
+				}
+				if(timer2+3 == score) {
+					sizeUp = false;
+				}
 				
 			}
 			
@@ -191,8 +197,9 @@ public class ObjectManager implements ActionListener {
 				purgeObjects();
 				System.out.println("collected power up");
 				powerUp = true;
+				timer = score;
 				fast++;
-			}
+			} 
 			
 		}
 		for (int i = 0; i < powerUps2.size(); i++) {
@@ -201,7 +208,7 @@ public class ObjectManager implements ActionListener {
 				purgeObjects();
 				System.out.println("collected size up");
 				sizeUp = true;
-				pause = score;
+				timer2 = score;
 				
 			}
 			
@@ -225,12 +232,12 @@ public class ObjectManager implements ActionListener {
 		System.out.println("Bomb added");
 		
 		}
-		if (count%5 == 0) {
-			addPowerUp();
+		if (count%7 == 0) {
+		//	addPowerUp();
 			System.out.println("powerUp added");
 			
 			}
-		if (count%6 == 0) {
+		if (count%3 == 0) {
 			addPowerUp2();
 			System.out.println("sizeUp added");
 			

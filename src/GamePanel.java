@@ -30,7 +30,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 	@Override
 	public void paintComponent(Graphics g) {
-		gg=g;
+		gg = g;
 		if (currentState == MENU) {
 			drawMenuState(g);
 		} else if (currentState == GAME) {
@@ -39,7 +39,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			drawEndState(g);
 		}
 	}
-	
 
 	GamePanel() {
 		this.titleFont = new Font("Arial", Font.PLAIN, 48);
@@ -49,7 +48,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		frameDraw = new Timer(1000 / 60, this);
 		frameDraw.start();
 	}
-	
 
 	private void drawEndState(Graphics g) {
 		g.setColor(Color.BLACK);
@@ -63,6 +61,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.drawString("Your Score Was: " + score1, 10, 30);
 		obManage.powerUp = false;
 	}
+
 	void sizeDown() {
 		basket.sizeDown();
 	}
@@ -86,13 +85,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.fillOval(225, 50, 150, 150);
 		obManage.draw(g);
 
-		if(obManage.sizeUp == true) {
-			if(count == 0) {
+		if (obManage.sizeUp == true) {
+			if (count == 0) {
 				basket.sizeUp();
 			}
 			count = 1;
 		}
 		
+
 		if (harderGame == true) {
 			while (obManage.collectedApple()) {
 				if (appleSpawn.getDelay() > 500) {
@@ -140,7 +140,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.setFont(textFont);
 		g.drawString("Press ENTER to start", 150, 400);
 		g.drawString("Press SPACE for instructions", 120, 500);
-		
+
 		if (showRules == true) {
 			g.setFont(smallFont);
 			g.drawString("1. Use arrows to move", 120, 550);
@@ -148,7 +148,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			g.drawString("3. If one touches the ground you lose", 120, 590);
 			g.drawString("4. Watch out for bombs", 120, 610);
 		}
-		
+
 	}
 
 	@Override
@@ -177,20 +177,19 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				showRules = true;
 			}
 		}
-		
+
 		if (currentState == GAME) {
 
 			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 				System.out.println("LEFT");
 				if (basket.x > 0) {
-					if(obManage.powerUp == true) {
+					if (obManage.powerUp == true) {
 						basket.fastLeft(obManage.fast);
 						System.out.println("fast");
-					}
-					else {
+					} else {
 						basket.left();
 					}
-					
+
 				}
 			}
 			if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
@@ -198,11 +197,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				if (basket.x >= AppleFall.WIDTH - 100) {
 
 				} else {
-					if(obManage.powerUp == true) {
+					if (obManage.powerUp == true) {
 						basket.fastRight(obManage.fast);
 						System.out.println("fast");
-					}
-					else {
+					} else {
 						basket.right();
 					}
 				}
@@ -215,6 +213,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		appleSpawn.start();
 		basket.isActive = true;
 		obManage.score = 0;
+		basket.y = 650;
+		basket.x = 250;
 	}
 
 	private void stopGame() {
@@ -223,9 +223,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		basket.x = 250;
 		basket.y = 650;
 		if (off == 0) {
-		obManage.clearObjects();
+			obManage.clearObjects();
+			obManage.sizeUp = false;
+			obManage.powerUp = false;
+			sizeDown();
 		}
-		off=1;
+		off = 1;
 	}
 
 	@Override
@@ -246,7 +249,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			if (off == 0) {
 				obManage.clearObjects();
 			}
-			off=1;
+			off = 1;
 		}
 		repaint();
 	}
