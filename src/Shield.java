@@ -4,16 +4,15 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-public class Basket extends GameObject {
+public class Shield extends GameObject {
 	public static BufferedImage image;
 	public static boolean needImage = true;
 	public static boolean gotImage = false;
 
-	Basket(int x, int y, int width, int height) {
+	Shield(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		speed = 1;
 		if (needImage) {
-			loadImage("basket.png");
+			loadImage("Shield.png");
 		}
 	}
 
@@ -36,35 +35,13 @@ public class Basket extends GameObject {
 	public void sizeDown() {
 		width = 100;
 		height = 100;
-		y = 650;
+		y = 100;
 		x = x + 100;
 	}
-
-	public void right() {
-		for (int i = 0; i < 10; i++) {
-			x += speed;
-
-		}
+	public void appear() {
+		y=750;
 	}
 
-	public void left() {
-		for (int i = 0; i < 10; i++) {
-			x -= speed;
-		}
-	}
-
-	public void fastRight(int fast) {
-		for (int i = 0; i < 10; i++) {
-			x += speed * fast;
-		}
-
-	}
-
-	public void fastLeft(int fast) {
-		for (int i = 0; i < 10; i++) {
-			x -= speed * fast;
-		}
-	}
 
 	void loadImage(String imageFile) {
 		if (needImage) {

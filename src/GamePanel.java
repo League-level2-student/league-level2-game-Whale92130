@@ -21,11 +21,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	int currentState = MENU;
 	boolean showRules = false;
 	boolean harderGame = true;
+	boolean isBasketBig = false;
+	boolean isShieldUp = false;
 	int off = 0;
 	int c = 1;
 	int count = 0;
 	Graphics gg;
 	Basket basket = new Basket(250, 650, 100, 100);
+	Shield shield = new Shield(250, 1000, 100, 100);
 	ObjectManager obManage = new ObjectManager(basket);
 
 	@Override
@@ -88,10 +91,17 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		if (obManage.sizeUp == true) {
 			if (count == 0) {
 				basket.sizeUp();
+				isBasketBig = true;
 			}
 			count = 1;
 		}
-		
+		if (isShieldUp == true) {
+			if (obManage.sizeUp == false) {
+				basket.sizeDown();
+				isShieldUp = false;
+				count = 0;
+			}
+		}
 
 		if (harderGame == true) {
 			while (obManage.collectedApple()) {
@@ -147,6 +157,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			g.drawString("2. Collect Apples", 120, 570);
 			g.drawString("3. If one touches the ground you lose", 120, 590);
 			g.drawString("4. Watch out for bombs", 120, 610);
+			g.drawString("5. Collect Power Ups on the way", 120, 630);
 		}
 
 	}
@@ -181,7 +192,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		if (currentState == GAME) {
 
 			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-				System.out.println("LEFT");
 				if (basket.x > 0) {
 					if (obManage.powerUp == true) {
 						basket.fastLeft(obManage.fast);
@@ -192,8 +202,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 				}
 			}
+
 			if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-				System.out.println("RIGHT");
 				if (basket.x >= AppleFall.WIDTH - 100) {
 
 				} else {
@@ -222,13 +232,13 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		System.out.println("stop");
 		basket.x = 250;
 		basket.y = 650;
-		if (off == 0) {
+		if (off < 2) {
 			obManage.clearObjects();
 			obManage.sizeUp = false;
 			obManage.powerUp = false;
 			sizeDown();
 		}
-		off = 1;
+		off++;
 	}
 
 	@Override
