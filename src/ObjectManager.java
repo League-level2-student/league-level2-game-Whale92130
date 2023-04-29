@@ -204,6 +204,9 @@ public class ObjectManager implements ActionListener {
 				score++;
 				purgeObjects();
 				collect = true;
+				
+				
+				
 				if (timer + 5 == score) {
 					powerUp = false;
 					System.out.println("PowerUp ran out");
@@ -213,10 +216,6 @@ public class ObjectManager implements ActionListener {
 					sizeUp = false;
 					System.out.println("SizeUp ran out");
 				}
-				if (timer3 + 5 == bombCount) {
-					shieldUp = false;
-					System.out.println("SheildUp ran out");
-				}
 
 			}
 
@@ -225,12 +224,16 @@ public class ObjectManager implements ActionListener {
 			if (bombs.get(i).collisionBox.intersects(basket.collisionBox)) {
 				bombs.get(i).isActive = false;
 				bombCount++;
+				System.out.println("bombCount = " + bombCount);
 				if (shieldUp == false) {
 					purgeObjects();
 					System.out.println("bomb hit");
 					basket.isActive = false;
 				}
-
+				if (timer3 + 5 == bombCount) {
+					shieldUp = false;
+					System.out.println("SheildUp ran out");
+				}
 			}
 
 		}
@@ -263,7 +266,7 @@ public class ObjectManager implements ActionListener {
 				purgeObjects();
 				System.out.println("collected power up");
 				shieldUp = true;
-				timer3 = score;
+				timer3 = bombCount;
 
 			}
 
@@ -283,22 +286,30 @@ public class ObjectManager implements ActionListener {
 		// TODO Auto-generated method stub
 		System.out.println("apples added");
 		addApple();
-		if (count % 4 == 0) {
+		 int randomInt = random.nextInt(5);
+		if (randomInt == 0) {
 			addBomb();
 			System.out.println("Bomb added");
 
 		}
-		if (count % 7 == 0) {
+		randomInt = random.nextInt(9);
+
+		if (randomInt == 5) {
 			addPowerUp();
 			System.out.println("powerUp added");
 
 		}
-		if (count % 8 == 0) {
+		
+		randomInt = random.nextInt(10);
+
+		if (randomInt == 1) {
 			addPowerUp2();
 			System.out.println("sizeUp added");
 
 		}
-		if (count % 3 == 0) {
+		randomInt = random.nextInt(12);
+
+		if (randomInt == 8) {
 			addPowerUp3();
 			System.out.println("ShieldUp added");
 

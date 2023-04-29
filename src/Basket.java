@@ -8,7 +8,7 @@ public class Basket extends GameObject {
 	public static BufferedImage image;
 	public static boolean needImage = true;
 	public static boolean gotImage = false;
-
+	boolean shield = false;
 	Basket(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		speed = 1;
@@ -20,6 +20,16 @@ public class Basket extends GameObject {
 	void draw(Graphics g) {
 		if (gotImage) {
 			g.drawImage(image, x, y, width, height, null);
+			if (shield == true) {
+				g.setColor(Color.BLUE);
+				g.fillRect(x, y-30, width, 20);
+				
+				g.fillRect(x-20, y-20, 30, 20);
+				g.fillRect(x+width-10, y-20, 30, 20);
+				
+				g.fillRect(x-30, y-5, 30, 20);
+				g.fillRect(x+width, y-5, 30, 20);
+			}
 		} else {
 			g.setColor(Color.BLUE);
 			g.fillRect(x, y, width, height);

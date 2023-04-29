@@ -26,9 +26,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	int off = 0;
 	int c = 1;
 	int count = 0;
+	int count2 = 0;
 	Graphics gg;
 	Basket basket = new Basket(250, 650, 100, 100);
-	Shield shield = new Shield(250, 1000, 100, 100);
 	ObjectManager obManage = new ObjectManager(basket);
 
 	@Override
@@ -88,6 +88,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.fillOval(225, 50, 150, 150);
 		obManage.draw(g);
 
+		
 		if (obManage.sizeUp == true) {
 			if (count == 0) {
 				basket.sizeUp();
@@ -95,13 +96,30 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			}
 			count = 1;
 		}
-		if (isShieldUp == true) {
+		if (isBasketBig == true) {
 			if (obManage.sizeUp == false) {
 				basket.sizeDown();
-				isShieldUp = false;
+				isBasketBig = false;
 				count = 0;
 			}
 		}
+		
+		
+		if (obManage.shieldUp == true) {
+			if (count2 == 0) {
+				basket.shield = true;
+				isShieldUp = true;
+			}
+			count2 = 1;
+		}
+		if (isShieldUp == true) {
+			if (obManage.shieldUp == false) {
+				basket.shield = false;
+				isBasketBig = false;
+				count2 = 0;
+			}
+		}
+		
 
 		if (harderGame == true) {
 			while (obManage.collectedApple()) {
@@ -223,6 +241,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		appleSpawn.start();
 		basket.isActive = true;
 		obManage.score = 0;
+		obManage.bombCount = 0;
 		basket.y = 650;
 		basket.x = 250;
 	}
@@ -236,6 +255,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			obManage.clearObjects();
 			obManage.sizeUp = false;
 			obManage.powerUp = false;
+			obManage.shieldUp = false;
 			sizeDown();
 		}
 		off++;
