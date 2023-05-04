@@ -87,32 +87,32 @@ public class ObjectManager implements ActionListener {
 		if (basket.isActive == true) {
 			for (int i = 0; i < apples.size(); i++) {
 				apples.get(i).update();
-				if (apples.get(i).y > 660) {
+				if (apples.get(i).y > 740) {
 					apples.get(i).isActive = false;
 					basket.isActive = false;
 				}
 			}
 			for (int i = 0; i < bombs.size(); i++) {
 				bombs.get(i).update();
-				if (bombs.get(i).y > 660) {
+				if (bombs.get(i).y > 740) {
 					bombs.get(i).isActive = false;
 				}
 			}
 			for (int i = 0; i < powerUps.size(); i++) {
 				powerUps.get(i).update();
-				if (powerUps.get(i).y > 660) {
+				if (powerUps.get(i).y > 740) {
 					powerUps.get(i).isActive = false;
 				}
 			}
 			for (int i = 0; i < powerUps2.size(); i++) {
 				powerUps2.get(i).update();
-				if (powerUps2.get(i).y > 660) {
+				if (powerUps2.get(i).y > 740) {
 					powerUps2.get(i).isActive = false;
 				}
 			}
 			for (int i = 0; i < powerUps3.size(); i++) {
 				powerUps3.get(i).update();
-				if (powerUps3.get(i).y > 660) {
+				if (powerUps3.get(i).y > 740) {
 					powerUps3.get(i).isActive = false;
 				}
 			}
@@ -286,28 +286,28 @@ public class ObjectManager implements ActionListener {
 		// TODO Auto-generated method stub
 		System.out.println("apples added");
 		addApple();
-		 int randomInt = random.nextInt(5);
+		 int randomInt = random.nextInt(7);
 		if (randomInt == 0) {
 			addBomb();
 			System.out.println("Bomb added");
 
 		}
-		randomInt = random.nextInt(9);
+		randomInt = random.nextInt(15);
 
-		if (randomInt == 5) {
+		if (randomInt == 1) {
 			addPowerUp();
 			System.out.println("powerUp added");
 
 		}
 		
-		randomInt = random.nextInt(10);
+		randomInt = random.nextInt(20);
 
-		if (randomInt == 1) {
+		if (randomInt == 10) {
 			addPowerUp2();
 			System.out.println("sizeUp added");
 
 		}
-		randomInt = random.nextInt(12);
+		randomInt = random.nextInt(25);
 
 		if (randomInt == 8) {
 			addPowerUp3();
