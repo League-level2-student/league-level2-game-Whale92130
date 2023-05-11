@@ -14,6 +14,7 @@ public class ObjectManager implements ActionListener {
 	int timer = 0;
 	int timer2 = 0;
 	int timer3 = 0;
+	int bombProb = 7;
 	ArrayList<Apple> apples = new ArrayList<Apple>();
 	ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 	ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
@@ -286,7 +287,7 @@ public class ObjectManager implements ActionListener {
 		// TODO Auto-generated method stub
 		System.out.println("apples added");
 		addApple();
-		 int randomInt = random.nextInt(7);
+		int randomInt = random.nextInt(bombProb);
 		if (randomInt == 0) {
 			addBomb();
 			System.out.println("Bomb added");

@@ -73,7 +73,27 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	private void drawGameState(Graphics g) {
+		
+		if (JMode == true) {
+			
+			g.setColor(Color.DARK_GRAY);
+			g.fillRect(0, 0, AppleFall.WIDTH, AppleFall.HEIGHT);
+			
+			g.setColor(Color.ORANGE);
+			g.fillOval(-100, -50, 400, 200);
+			g.setColor(Color.ORANGE);
+			g.fillOval(300, -50, 400, 200);
 
+			g.setColor(Color.RED);
+			g.fillRect(175, 0, 250, AppleFall.HEIGHT);
+
+			g.setColor(Color.BLACK);
+			g.fillRect(0, 700, AppleFall.WIDTH, 100);
+
+			g.setColor(Color.black);
+			g.fillOval(225, 50, 150, 150);
+		}
+		else {
 		g.setColor(Color.CYAN);
 		g.fillRect(0, 0, AppleFall.WIDTH, AppleFall.HEIGHT);
 
@@ -89,6 +109,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 		g.setColor(Color.black);
 		g.fillOval(225, 50, 150, 150);
+		}
+	
 		obManage.draw(g);
 
 		if (obManage.powerUp == false) {
@@ -126,13 +148,16 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		}
 		if (JMode == true) {
 			timerMultiply = 500;
+			obManage.bombProb = 1;
 		} else if (hardMode == true) {
 			timerMultiply = 100;
+			obManage.bombProb = 3;
 		} else if (hardMode == false) {
 			timerMultiply = 30;
+			obManage.bombProb = 7;
 		}
 		if (harderGame == true) {
-			while (obManage.collectedApple()) {
+			while (obManage.collectedApple() == true) {
 				if (appleSpawn.getDelay() > 500) {
 					appleSpawn.stop();
 					appleSpawn = new Timer(2000 - obManage.getScore() * timerMultiply, obManage);
@@ -168,6 +193,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		obManage.setfalse();
 		appleSpawn.stop();
 		appleSpawn = new Timer(500, obManage);
+		appleSpawn.start();
 	}
 
 	private void drawMenuState(Graphics g) {
@@ -201,7 +227,25 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			g.drawString("Press ENTER to start", 151, 401);
 			g.setColor(Color.BLACK);
 			g.drawString("Press ENTER to start", 152, 402);
-
+			
+			g.setColor(Color.RED);
+			g.drawString("Press SPACE for instructions", 120, 500);
+			g.setColor(Color.DARK_GRAY);
+			g.drawString("Press SPACE for instructions", 121, 501);
+			g.setColor(Color.BLACK);
+			g.drawString("Press SPACE for instructions", 122, 502);
+			
+			if (showRules == true) {
+				g.setFont(smallFont);
+				g.setColor(Color.RED);				
+				g.drawString("1. Use arrows to move", 120, 550);
+				g.drawString("2. Collect Apples", 120, 570);
+				g.drawString("3. If one touches the ground you lose", 120, 590);
+				g.drawString("4. Watch out for bombs", 120, 610);
+				g.drawString("5. Collect Power Ups on the way", 120, 630);
+				g.drawString("6. Press H to toggle HARD MODE", 120, 650);
+				g.drawString("7. Don't press J", 120, 670);
+			}
 		} 
 		
 		else if (hardMode == true) {
@@ -214,18 +258,13 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			g.setColor(Color.GREEN);
 			g.drawString("Mode: EASY", 200, 340);
 		}
-		//fix
-		//
-		//
-		//
-		//fix
-		else {
+		if (JMode == false) {
 			g.setFont(textFont);
 			g.setColor(Color.YELLOW);
 			g.drawString("Press ENTER to start", 150, 400);
 			g.setColor(Color.CYAN);
 			g.drawString("Press SPACE for instructions", 120, 500);
-			}
+		}
 
 		if (showRules == true) {
 			g.setFont(smallFont);
@@ -325,7 +364,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	private void stopGame() {
-		obManage.score = 0;
 		appleSpawn.stop();
 		appleSpawn.stop();
 		obManage.fast = 1;
